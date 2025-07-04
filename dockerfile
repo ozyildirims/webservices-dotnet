@@ -24,6 +24,8 @@ WORKDIR /work
 ENV DOTNET_NOLOGO=true
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=true
 
+ARG RUNTIME_IDENTIFIER=linux-x64
+
 COPY ./Directory.Build.props ./
 COPY ./Directory.Packages.props ./
 COPY src/*/*.csproj ./
@@ -32,7 +34,7 @@ RUN for projectFile in $(ls *.csproj); \
   mkdir -p ${projectFile%.*}/ && mv $projectFile ${projectFile%.*}/; \
   done
 
-RUN cd /work/HappyCode.NetCoreBoilerplate.Api && dotnet restore -r linux-arm64
+RUN cd /work/HappyCode.NetCoreBoilerplate.Api && dotnet restore -r ${RUNTIME_IDENTIFIER}
 
 COPY src .
 
@@ -44,7 +46,9 @@ WORKDIR /work/HappyCode.NetCoreBoilerplate.Api
 ENV DOTNET_NOLOGO=true
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=true
 
-RUN dotnet publish -c Release -r linux-arm64 \
+ARG RUNTIME_IDENTIFIER=linux-x64
+
+RUN dotnet publish -c Release -r ${RUNTIME_IDENTIFIER} \
   -o /app --no-restore
 
 # --------------

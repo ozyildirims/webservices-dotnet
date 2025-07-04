@@ -1,0 +1,5 @@
+services:
+  netcore-boilerplate:
+    build:
+      args:
+        RUNTIME_IDENTIFIER: linux-arm64 
