@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 8080
 
@@ -12,15 +12,13 @@ ENV \
   LC_ALL=en_US.UTF-8 \
   LANG=en_US.UTF-8
 
-RUN apk add --upgrade --no-cache \
-  icu-data-full \
-  icu-libs \
-  tzdata \
-  curl
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
 # --------------
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS restore
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS restore
 WORKDIR /work
 
 ENV DOTNET_NOLOGO=true
@@ -34,7 +32,7 @@ RUN for projectFile in $(ls *.csproj); \
   mkdir -p ${projectFile%.*}/ && mv $projectFile ${projectFile%.*}/; \
   done
 
-RUN cd /work/HappyCode.NetCoreBoilerplate.Api && dotnet restore -r linux-musl-x64
+RUN cd /work/HappyCode.NetCoreBoilerplate.Api && dotnet restore -r linux-arm64
 
 COPY src .
 
@@ -46,7 +44,7 @@ WORKDIR /work/HappyCode.NetCoreBoilerplate.Api
 ENV DOTNET_NOLOGO=true
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=true
 
-RUN dotnet publish -c Release -r linux-musl-x64 \
+RUN dotnet publish -c Release -r linux-arm64 \
   -o /app --no-restore
 
 # --------------
