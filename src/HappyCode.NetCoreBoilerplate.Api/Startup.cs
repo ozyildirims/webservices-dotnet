@@ -72,7 +72,6 @@ namespace HappyCode.NetCoreBoilerplate.Api
             if (_configuration.GetValue<bool>($"FeatureManagement:{FeatureFlags.DockerCompose}"))
             {
                 healthChecksBuilder
-                    .AddMySql(_configuration.GetConnectionString("MySqlDb"), tags: ["ready"])
                     .AddSqlServer(_configuration.GetConnectionString("MsSqlDb"), tags: ["ready"]);
             }
         }

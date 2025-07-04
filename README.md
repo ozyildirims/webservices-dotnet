@@ -52,7 +52,6 @@ At the end, You are in charge, so it's your decision to which path you would lik
 1. [FeatureManagement](https://github.com/microsoft/FeatureManagement-Dotnet) (Feature Flags, Feature Toggles)
 1. [HealthChecks](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks)
 1. [EF Core](https://docs.microsoft.com/ef/)
-    * [MySQL project (Oracle)](https://dev.mysql.com/doc/connector-net/en/connector-net-entityframework-core.html)
     * [MsSQL from Microsoft](https://github.com/aspnet/EntityFrameworkCore/)
 1. [Dapper](https://github.com/DapperLib/Dapper)
     * [Microsoft.Data.Sqlite](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/)
@@ -91,7 +90,6 @@ At the end, You are in charge, so it's your decision to which path you would lik
     * [Dockerfile](dockerfile)
       * [Alpine Linux](https://github.com/dotnet/dotnet-docker/blob/main/samples/selecting-tags.md#alpine-linux) with [globalization](https://github.com/dotnet/dotnet-docker/blob/main/samples/enable-globalization.md)
     * [Docker-compose](docker-compose.yml)
-        * `mysql:8` with DB initialization
         * `mcr.microsoft.com/mssql/server:2022-latest` with DB initialization
         * `netcore-boilerplate:compose`
     * [Build and test](.github/workflows/docker-build.yml)
@@ -174,14 +172,12 @@ Generally it is totally up to you! But in case you do not have any plan, You can
 * Simple Startup class - [Startup.cs](src/HappyCode.NetCoreBoilerplate.Api/Startup.cs)
   * Logging and Global exception middleware
   * MvcCore
-  * DbContext (with MySQL)
   * DbContext (with MsSQL)
   * OpenAPI
   * HostedService and HttpClient
   * Core components and [Books module](#books-module) registration
   * FeatureManagement
   * HealthChecks
-    * MySQL
     * MsSQL
 * Infrastructure
   * `Banner` configuration place - [BannerConfigurator.cs](src/HappyCode.NetCoreBoilerplate.Api/Infrastructure/Configurations/BannerConfigurator.cs)
@@ -214,12 +210,10 @@ Generally it is totally up to you! But in case you do not have any plan, You can
   * DB models
   * AppSettings models - [Settings](src/HappyCode.NetCoreBoilerplate.Core/Settings)
 * DbContexts
-  * MySQL DbContext - [EmployeesContext.cs](src/HappyCode.NetCoreBoilerplate.Core/EmployeesContext.cs)
   * MsSQL DbContext - [CarsContext.cs](src/HappyCode.NetCoreBoilerplate.Core/CarsContext.cs)
 * Providers
   * Version provider - [VersionProvider.cs](src/HappyCode.NetCoreBoilerplate.Core/Providers/VersionProvider.cs)
 * Core registrations - [CoreRegistrations.cs](src/HappyCode.NetCoreBoilerplate.Core/Registrations/CoreRegistrations.cs)
-* Exemplary MySQL repository - [EmployeeRepository.cs](src/HappyCode.NetCoreBoilerplate.Core/Repositories/EmployeeRepository.cs)
 * Exemplary MsSQL service - [CarService.cs](src/HappyCode.NetCoreBoilerplate.Core/Services/CarService.cs)
 
 ![HappyCode.NetCoreBoilerplate.Core](.assets/core.png "HappyCode.NetCoreBoilerplate.Core")
@@ -261,7 +255,7 @@ Generally it is totally up to you! But in case you do not have any plan, You can
 [HappyCode.NetCoreBoilerplate.Core.UnitTests](test/HappyCode.NetCoreBoilerplate.Core.UnitTests)
 
 * Extension methods to mock `DbSet` faster - [EnumerableExtensions.cs](test/HappyCode.NetCoreBoilerplate.Core.UnitTests/Extensions/EnumerableExtensions.cs)
-* Exemplary tests - [EmployeeRepositoryTests.cs](test/HappyCode.NetCoreBoilerplate.Core.UnitTests/Repositories/EmployeeRepositoryTests.cs), [CarServiceTests.cs](test/HappyCode.NetCoreBoilerplate.Core.UnitTests/Services/CarServiceTests.cs)
+* Exemplary tests - [CarServiceTests.cs](test/HappyCode.NetCoreBoilerplate.Core.UnitTests/Services/CarServiceTests.cs)
 * Providers tests
   * [VersionProviderTests.cs](test/HappyCode.NetCoreBoilerplate.Core.UnitTests/Providers/VersionProviderTests.cs) with [HappyCode.NetCoreBoilerplate.Core.UnitTests.runsettings](test/HappyCode.NetCoreBoilerplate.Core.UnitTests/HappyCode.NetCoreBoilerplate.Core.UnitTests.runsettings)
 
