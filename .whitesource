@@ -1,0 +1,11 @@
+{
+  "checkRunSettings": {
+    "vulnerableCheckRunConclusionLevel": "failure"
+  },
+  "issueSettings": {
+    "minSeverityLevel": "LOW"
+  },
+  "excludePatterns": [
+    "test/**"
+  ]
+}
