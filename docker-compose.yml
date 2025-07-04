@@ -35,5 +35,16 @@ services:
     depends_on:
       - mssql
 
+  nextjs-admin:
+    container_name: nextjs-admin
+    build:
+      context: ./admin-panel
+    ports:
+      - 3000:3000
+    volumes:
+      - ./admin-panel:/app
+    environment:
+      - NODE_ENV=production
+
 volumes:
   mssqldata:
