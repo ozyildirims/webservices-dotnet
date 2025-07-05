@@ -1,7 +1,18 @@
 #!/bin/bash
+set -e
 
-echo "waiting 20s for the SQL Server to come up..."
-sleep 20s
+# Wait for SQL Server to be ready
+sleep 30s
 
-echo "running set up script..."
-/opt/mssql-tools18/bin/sqlcmd -C -U sa -P "${MSSQL_SA_PASSWORD}" -d master -i db-init.sql
+# Run the setup script
+/opt/mssql-tools18/bin/sqlcmd -b -S localhost -U sa -P SomeStrongPwd123 -Q "
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'limitkurs')
+BEGIN
+    CREATE DATABASE limitkurs;
+END
+GO
+USE limitkurs;
+GO"
+
+# Make the script executable
+chmod +x /db-init.sh

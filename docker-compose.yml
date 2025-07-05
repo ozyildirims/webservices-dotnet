@@ -7,6 +7,7 @@
 services:
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
     container_name: mssql
     command: /bin/bash /entrypoint.sh
     ports:
@@ -15,36 +16,72 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
       - MSSQL_SA_PASSWORD=SomeStrongPwd123
+      - MSSQL_TCP_PORT=1433
+      - MSSQL_ENABLE_HADR=0
+      - MSSQL_BACKUP_DIR=/var/opt/mssql/backup
+      - MSSQL_DATA_DIR=/var/opt/mssql/data
+      - MSSQL_LOG_DIR=/var/opt/mssql/log
+      - MSSQL_DUMP_DIR=/var/opt/mssql/dump
+      - MSSQL_COLLATION=SQL_Latin1_General_CP1_CI_AS
+      - MSSQL_MEMORY_LIMIT_MB=2048
+      - MSSQL_AGENT_ENABLED=false
+      - MSSQL_ENABLE_HADR=0
+      - MSSQL_LCID=1033
+      - MSSQL_MASTER_DATA_FILE=/var/opt/mssql/data/master.mdf
+      - MSSQL_MASTER_LOG_FILE=/var/opt/mssql/data/mastlog.ldf
+      - MSSQL_ERROR_LOG_FILE=/var/opt/mssql/log/errorlog
+      - MSSQL_TELEMETRY_ENABLED=false
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -U sa -P SomeStrongPwd123 -Q 'SELECT 1'"]
-      start_period: 20s
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P SomeStrongPwd123 -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
     volumes:
       - mssqldata:/var/opt/mssql
       - ./db/mssql/docker-entrypoint.sh:/entrypoint.sh
       - ./db/mssql/docker-db-init.sh:/db-init.sh
-      - ./db/mssql/mssql-cars.sql:/db-init.sql
+
+  migrator:
+    build:
+      context: ./src/HappyCode.NetCoreBoilerplate.Db
+    depends_on:
+      mssql:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    restart: "no"
 
   netcore-boilerplate:
     container_name: netcore-boilerplate
     build:
       context: .
+      dockerfile: src/HappyCode.NetCoreBoilerplate.Api/Dockerfile
     ports:
-      - 5000:8080
+      - 5001:8080
     environment:
-      FeatureManagement__DockerCompose: true
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
     depends_on:
       - mssql
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
 
   nextjs-admin:
     container_name: nextjs-admin
     build:
-      context: ./admin-panel
+      context: ./src/HappyCode.NetCoreBoilerplate.Admin
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
-    volumes:
-      - ./admin-panel:/app
     environment:
       - NODE_ENV=production
+    depends_on:
+      - netcore-boilerplate
 
 volumes:
   mssqldata:

@@ -1,19 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
     <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json" CopyToOutputDirectory="Always" />
   </ItemGroup>
+
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\Sql\S001_AddCarTypesTable.sql" />
+    <EmbeddedResource Include="Scripts/Sql/S001_CreateDatabase.sql" />
+    <EmbeddedResource Include="Scripts/Sql/S002_CreateLimitKursDatabase.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="dbup-sqlserver" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
   </ItemGroup>
+
 </Project>
