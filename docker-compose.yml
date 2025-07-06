@@ -32,7 +32,7 @@ services:
       - MSSQL_ERROR_LOG_FILE=/var/opt/mssql/log/errorlog
       - MSSQL_TELEMETRY_ENABLED=false
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P SomeStrongPwd123 -Q 'SELECT 1' -b -o /dev/null"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P SomeStrongPwd123 -Q 'SELECT 1' -b -o /dev/null -C"]
       interval: 10s
       timeout: 3s
       retries: 10
@@ -65,7 +65,7 @@ services:
     depends_on:
       - mssql
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/healthz/ready || exit 1"]
       interval: 10s
       timeout: 3s
       retries: 3

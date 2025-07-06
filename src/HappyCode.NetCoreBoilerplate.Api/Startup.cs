@@ -68,9 +68,9 @@ namespace HappyCode.NetCoreBoilerplate.Api
                 });
 
             //there is a difference between AddDbContext() and AddDbContextPool(), more info https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-2.0#dbcontext-pooling and https://stackoverflow.com/questions/48443567/adddbcontext-or-adddbcontextpool
-            services.AddDbContext<EmployeesContext>(options => options.UseSqlServer(_configuration.GetConnectionString("MsSqlDb")), contextLifetime: ServiceLifetime.Transient, optionsLifetime: ServiceLifetime.Singleton);
-            services.AddDbContextPool<CarsContext>(options => options.UseSqlServer(_configuration.GetConnectionString("MsSqlDb")), poolSize: 10);
-            services.AddDbContext<LimitKursContext>(options => options.UseSqlServer(_configuration.GetConnectionString("MsSqlDb")), contextLifetime: ServiceLifetime.Transient, optionsLifetime: ServiceLifetime.Singleton);
+            services.AddDbContext<EmployeesContext>(options => options.UseSqlServer(_configuration.GetConnectionString("MsSqlDb"), sql => sql.EnableRetryOnFailure()), contextLifetime: ServiceLifetime.Transient, optionsLifetime: ServiceLifetime.Singleton);
+            services.AddDbContextPool<CarsContext>(options => options.UseSqlServer(_configuration.GetConnectionString("MsSqlDb"), sql => sql.EnableRetryOnFailure()), poolSize: 10);
+            services.AddDbContext<LimitKursContext>(options => options.UseSqlServer(_configuration.GetConnectionString("MsSqlDb"), sql => sql.EnableRetryOnFailure()), contextLifetime: ServiceLifetime.Transient, optionsLifetime: ServiceLifetime.Singleton);
 
             services.Configure<ApiKeySettings>(_configuration.GetSection("ApiKey"));
             services.AddOpenApi(_configuration);
@@ -83,50 +83,6 @@ namespace HappyCode.NetCoreBoilerplate.Api
             services.AddCoreComponents();
             services.AddBooksModule(_configuration);
             services.AddExamsModule(_configuration);
-
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "HappyCode.NetCoreBoilerplate API", Version = "v1" });
-                
-                // Include XML comments from API project
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
-
-                // Include XML comments from ExamsModule
-                var examsXmlFile = $"{typeof(ExamsModuleConfiguration).Assembly.GetName().Name}.xml";
-                var examsXmlPath = Path.Combine(AppContext.BaseDirectory, examsXmlFile);
-                options.IncludeXmlComments(examsXmlPath);
-
-                // Include XML comments from AnnouncementsModule
-                var announcementsXmlFile = $"{typeof(HappyCode.NetCoreBoilerplate.AnnouncementsModule.AnnouncementsContext).Assembly.GetName().Name}.xml";
-                var announcementsXmlPath = Path.Combine(AppContext.BaseDirectory, announcementsXmlFile);
-                options.IncludeXmlComments(announcementsXmlPath);
-
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
-                });
-
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        Array.Empty<string>()
-                    }
-                });
-            });
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtService, JwtService>();
@@ -160,7 +116,7 @@ namespace HappyCode.NetCoreBoilerplate.Api
 
             // Register Announcements module
             services.AddDbContext<AnnouncementsContext>(options =>
-                options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(_configuration.GetConnectionString("MsSqlDb"), sql => sql.EnableRetryOnFailure()));
             services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
             services.AddScoped<IAnnouncementService, AnnouncementService>();
             services.AddScoped<INotificationService, FirebaseNotificationService>();
@@ -169,7 +125,7 @@ namespace HappyCode.NetCoreBoilerplate.Api
         public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMiddleware<ExceptionMiddleware>();
-            app.UseMiddlewareForFeature<ConnectionInfoMiddleware>(FeatureFlags.ConnectionInfo.ToString());
+            // app.UseMiddlewareForFeature<ConnectionInfoMiddleware>(FeatureFlags.ConnectionInfo.ToString());
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
