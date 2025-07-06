@@ -54,6 +54,7 @@ public class ExamDefinitionService : IExamDefinitionService
             CreatedById = createdById,
             IsPublished = false,
             TotalPoints = dto.Sections?.Sum(s => s.Points) ?? 0,
+            Results = new List<ExamResult>(),
             Sections = dto.Sections?.Select(s => new ExamSection
             {
                 Title = s.Title,

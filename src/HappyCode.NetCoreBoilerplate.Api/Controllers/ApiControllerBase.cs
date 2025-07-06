@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace HappyCode.NetCoreBoilerplate.Api.Controllers
 {
@@ -6,6 +7,13 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
     [ApiController]
     public abstract class ApiControllerBase : ControllerBase
     {
-
+        protected Guid UserId
+        {
+            get
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                return userIdClaim != null ? Guid.Parse(userIdClaim) : Guid.Empty;
+            }
+        }
     }
 }

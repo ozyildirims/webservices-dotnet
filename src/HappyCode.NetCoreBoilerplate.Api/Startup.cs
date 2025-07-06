@@ -98,6 +98,11 @@ namespace HappyCode.NetCoreBoilerplate.Api
                 var examsXmlPath = Path.Combine(AppContext.BaseDirectory, examsXmlFile);
                 options.IncludeXmlComments(examsXmlPath);
 
+                // Include XML comments from AnnouncementsModule
+                var announcementsXmlFile = $"{typeof(HappyCode.NetCoreBoilerplate.AnnouncementsModule.AnnouncementsContext).Assembly.GetName().Name}.xml";
+                var announcementsXmlPath = Path.Combine(AppContext.BaseDirectory, announcementsXmlFile);
+                options.IncludeXmlComments(announcementsXmlPath);
+
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -155,7 +160,7 @@ namespace HappyCode.NetCoreBoilerplate.Api
 
             // Register Announcements module
             services.AddDbContext<AnnouncementsContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
             services.AddScoped<IAnnouncementService, AnnouncementService>();
             services.AddScoped<INotificationService, FirebaseNotificationService>();
@@ -199,7 +204,7 @@ namespace HappyCode.NetCoreBoilerplate.Api
                 endpoints.MapOpenApi()
                     .CacheOutput();
 
-                endpoints.MapScalarApiReference("api-doc");
+                // Scalar dokümantasyonu için özel bir endpoint yok, OpenAPI endpointi yeterli.
             });
 
             app.InitBooksModule();

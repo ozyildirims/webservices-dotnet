@@ -8,6 +8,9 @@ using Microsoft.FeatureManagement.Mvc;
 
 namespace HappyCode.NetCoreBoilerplate.Api.Controllers
 {
+    /// <summary>
+    /// Manages employee-related operations
+    /// </summary>
     [FeatureGate(FeatureFlags.DockerCompose)]
     [Route("api/employees")]
     public class EmployeesController : ApiControllerBase
@@ -21,6 +24,12 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             _featureManager = featureManager;
         }
 
+        /// <summary>
+        /// Gets all employees
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of all employees</returns>
+        /// <response code="200">Returns the list of employees</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<EmployeeDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllAsync(
@@ -30,6 +39,14 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Gets a specific employee by ID
+        /// </summary>
+        /// <param name="id">The employee ID</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The employee details</returns>
+        /// <response code="200">Returns the employee</response>
+        /// <response code="404">If the employee is not found</response>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(EmployeeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -45,6 +62,14 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Gets a specific employee with detailed information
+        /// </summary>
+        /// <param name="id">The employee ID</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The employee with detailed information</returns>
+        /// <response code="200">Returns the employee details</response>
+        /// <response code="404">If the employee is not found</response>
         [HttpGet("{id}/details")]
         [ProducesResponseType(typeof(EmployeeDetailsDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -60,6 +85,13 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Gets the oldest employee (with Santa feature flag)
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The oldest employee</returns>
+        /// <response code="200">Returns the oldest employee</response>
+        /// <response code="404">If no employees are found</response>
         [HttpGet("oldest")]
         [ProducesResponseType(typeof(EmployeeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -86,6 +118,16 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Updates an existing employee
+        /// </summary>
+        /// <param name="id">The employee ID</param>
+        /// <param name="employeePutDto">The updated employee data</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The updated employee</returns>
+        /// <response code="200">Returns the updated employee</response>
+        /// <response code="400">If the data is invalid</response>
+        /// <response code="404">If the employee is not found</response>
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(EmployeeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -103,6 +145,14 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Creates a new employee
+        /// </summary>
+        /// <param name="employeePostDto">The employee data</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The created employee</returns>
+        /// <response code="201">Returns the created employee</response>
+        /// <response code="400">If the data is invalid</response>
         [HttpPost]
         [ProducesResponseType(typeof(EmployeeDto), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(HttpValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -115,6 +165,14 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             return CreatedAtAction("Get", new { id = result.Id }, result);
         }
 
+        /// <summary>
+        /// Deletes an employee
+        /// </summary>
+        /// <param name="id">The employee ID</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>No content</returns>
+        /// <response code="204">If the employee was deleted successfully</response>
+        /// <response code="404">If the employee is not found</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

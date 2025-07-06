@@ -7,6 +7,9 @@ using System.Security.Claims;
 
 namespace HappyCode.NetCoreBoilerplate.Api.Controllers
 {
+    /// <summary>
+    /// Manages authentication and authorization operations
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
@@ -18,6 +21,14 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             _authService = authService;
         }
 
+        /// <summary>
+        /// Authenticates a user and returns access token
+        /// </summary>
+        /// <param name="loginDto">Login credentials</param>
+        /// <returns>Authentication response with token</returns>
+        /// <response code="200">Returns the authentication response</response>
+        /// <response code="400">If the request data is invalid</response>
+        /// <response code="401">If the credentials are invalid</response>
         [HttpPost("login")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
@@ -36,6 +47,14 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Registers a new user
+        /// </summary>
+        /// <param name="registerDto">Registration data</param>
+        /// <returns>Authentication response with token</returns>
+        /// <response code="201">Returns the authentication response</response>
+        /// <response code="400">If the request data is invalid</response>
+        /// <response code="409">If the user already exists</response>
         [HttpPost("register")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status201Created)]
@@ -54,6 +73,13 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the current user's profile
+        /// </summary>
+        /// <returns>The user profile</returns>
+        /// <response code="200">Returns the user profile</response>
+        /// <response code="401">If the user is not authenticated</response>
+        /// <response code="404">If the user is not found</response>
         [HttpGet("profile")]
         [Authorize]
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
@@ -75,6 +101,15 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Updates the current user's profile
+        /// </summary>
+        /// <param name="updateDto">Updated profile data</param>
+        /// <returns>Success message</returns>
+        /// <response code="200">If the profile was updated successfully</response>
+        /// <response code="400">If the request data is invalid</response>
+        /// <response code="401">If the user is not authenticated</response>
+        /// <response code="404">If the user is not found</response>
         [HttpPut("profile")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -97,6 +132,14 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             return Ok(new { message = "Profile updated successfully" });
         }
 
+        /// <summary>
+        /// Changes the current user's password
+        /// </summary>
+        /// <param name="changePasswordDto">Password change data</param>
+        /// <returns>Success message</returns>
+        /// <response code="200">If the password was changed successfully</response>
+        /// <response code="400">If the current password is incorrect</response>
+        /// <response code="401">If the user is not authenticated</response>
         [HttpPost("change-password")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -118,6 +161,13 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             return Ok(new { message = "Password changed successfully" });
         }
 
+        /// <summary>
+        /// Refreshes the access token using a refresh token
+        /// </summary>
+        /// <param name="refreshTokenDto">Refresh token data</param>
+        /// <returns>New authentication response</returns>
+        /// <response code="200">Returns the new authentication response</response>
+        /// <response code="401">If the refresh token is invalid</response>
         [HttpPost("refresh")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
@@ -158,15 +208,35 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
         }
     }
 
+    /// <summary>
+    /// Data transfer object for changing password
+    /// </summary>
     public class ChangePasswordDto
     {
-        public string CurrentPassword { get; set; }
-        public string NewPassword { get; set; }
+        /// <summary>
+        /// Current password
+        /// </summary>
+        public string CurrentPassword { get; set; } = string.Empty;
+
+        /// <summary>
+        /// New password
+        /// </summary>
+        public string NewPassword { get; set; } = string.Empty;
     }
 
+    /// <summary>
+    /// Data transfer object for refresh token
+    /// </summary>
     public class RefreshTokenDto
     {
-        public string Token { get; set; }
-        public string RefreshToken { get; set; }
+        /// <summary>
+        /// Expired access token
+        /// </summary>
+        public string Token { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Refresh token
+        /// </summary>
+        public string RefreshToken { get; set; } = string.Empty;
     }
 } 

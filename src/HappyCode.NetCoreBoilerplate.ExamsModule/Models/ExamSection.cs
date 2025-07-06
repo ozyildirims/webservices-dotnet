@@ -15,8 +15,12 @@ public class ExamSection : BaseEntity
 
     public int MaxScore { get; set; }
     public int Order { get; set; }
+    public int OrderIndex { get; set; }
+    public int Points { get; set; }
+    public int QuestionCount { get; set; }
+    public TimeSpan SuggestedDuration { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public int ExamDefinitionId { get; set; }
-    public required ExamDefinition ExamDefinition { get; set; }
+    public Guid ExamDefinitionId { get; set; }
+    public ExamDefinition? ExamDefinition { get; set; }
 } 

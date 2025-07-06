@@ -1,15 +1,10 @@
 namespace HappyCode.NetCoreBoilerplate.AnnouncementsModule.Dtos;
 
 /// <summary>
-/// Data transfer object for announcement information
+/// Data transfer object for creating a new announcement
 /// </summary>
-public class AnnouncementDto
+public class CreateAnnouncementDto
 {
-    /// <summary>
-    /// Unique identifier for the announcement
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Title of the announcement
     /// </summary>
@@ -31,37 +26,12 @@ public class AnnouncementDto
     public DateTime? EndDate { get; set; }
 
     /// <summary>
-    /// Whether the announcement is currently active
-    /// </summary>
-    public bool IsActive { get; set; }
-
-    /// <summary>
     /// Priority level of the announcement (higher number = higher priority)
     /// </summary>
     public int Priority { get; set; }
 
     /// <summary>
-    /// ID of the user who created the announcement
-    /// </summary>
-    public Guid CreatedBy { get; set; }
-
-    /// <summary>
-    /// Date and time when the announcement was created
-    /// </summary>
-    public DateTime CreatedAt { get; set; }
-
-    /// <summary>
-    /// ID of the user who last modified the announcement
-    /// </summary>
-    public Guid? ModifiedBy { get; set; }
-
-    /// <summary>
-    /// Date and time when the announcement was last modified
-    /// </summary>
-    public DateTime? ModifiedAt { get; set; }
-
-    /// <summary>
     /// List of targets for this announcement
     /// </summary>
     public List<AnnouncementTargetDto> Targets { get; set; } = new();
-}
+} 

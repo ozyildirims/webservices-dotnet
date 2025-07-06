@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HappyCode.NetCoreBoilerplate.Api.Controllers
 {
+    /// <summary>
+    /// Manages ping and health check operations
+    /// </summary>
     [AllowAnonymous]
     [Route("api/pings")]
     public class PingsController : ApiControllerBase
@@ -17,6 +20,12 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             _pingService = pingService;
         }
 
+        /// <summary>
+        /// Gets the current website ping status code
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Website status code</returns>
+        /// <response code="200">Returns the website status code</response>
         [HttpGet("website")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public Task<IActionResult> GetWebsitePingStatusCodeAsync(
@@ -26,6 +35,12 @@ namespace HappyCode.NetCoreBoilerplate.Api.Controllers
             return Task.FromResult<IActionResult>(Ok($"{(int)result} ({result})"));
         }
 
+        /// <summary>
+        /// Gets a random HTTP status code
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Random status code</returns>
+        /// <response code="200">Returns a random status code</response>
         [HttpGet("random")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public Task<IActionResult> GetRandomStatusCodeAsync(

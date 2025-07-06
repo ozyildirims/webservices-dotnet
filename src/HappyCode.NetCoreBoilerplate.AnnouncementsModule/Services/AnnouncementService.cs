@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using HappyCode.NetCoreBoilerplate.AnnouncementsModule.Dtos;
 using HappyCode.NetCoreBoilerplate.AnnouncementsModule.Models;
 using HappyCode.NetCoreBoilerplate.AnnouncementsModule.Repositories;
@@ -55,7 +60,7 @@ public class AnnouncementService : IAnnouncementService
 
     public async Task<AnnouncementDto> CreateAsync(Guid createdBy, CreateAnnouncementDto dto)
     {
-        var announcement = new Announcement
+        var announcement = new HappyCode.NetCoreBoilerplate.AnnouncementsModule.Models.Announcement
         {
             Title = dto.Title,
             Content = dto.Content,
@@ -100,11 +105,14 @@ public class AnnouncementService : IAnnouncementService
 
         // Update targets
         announcement.Targets.Clear();
-        announcement.Targets.AddRange(dto.Targets.Select(t => new AnnouncementTarget
+        foreach (var target in dto.Targets)
         {
-            TargetType = t.TargetType,
-            TargetId = t.TargetId
-        }));
+            announcement.Targets.Add(new AnnouncementTarget
+            {
+                TargetType = target.TargetType,
+                TargetId = target.TargetId
+            });
+        }
 
         announcement = await _repository.UpdateAsync(announcement);
         return ToDto(announcement);
@@ -135,7 +143,15 @@ public class AnnouncementService : IAnnouncementService
 
     public async Task UpdateNotificationSettingsAsync(Guid userId, UpdateNotificationSettingsDto dto)
     {
-        await _repository.UpdateNotificationSettingsAsync(userId, dto.Settings);
+        var settings = dto.Settings.Select(s => new NotificationSetting
+        {
+            UserId = userId,
+            NotificationType = s.Key,
+            IsEnabled = s.Value,
+            CreatedAt = DateTime.UtcNow
+        }).ToList();
+        
+        await _repository.UpdateNotificationSettingsAsync(userId, settings);
     }
 
     public async Task<UserDeviceDto> RegisterDeviceAsync(Guid userId, RegisterDeviceDto dto)
@@ -144,7 +160,7 @@ public class AnnouncementService : IAnnouncementService
         return ToDto(device);
     }
 
-    private async Task<List<Guid>> GetTargetedUserIds(Announcement announcement)
+    private async Task<List<Guid>> GetTargetedUserIds(HappyCode.NetCoreBoilerplate.AnnouncementsModule.Models.Announcement announcement)
     {
         var userIds = new HashSet<Guid>();
 
@@ -160,7 +176,7 @@ public class AnnouncementService : IAnnouncementService
                 var usersWithRole = await _repository.GetUsersByRoleIdAsync(target.TargetId);
                 foreach (var user in usersWithRole)
                 {
-                    userIds.Add(user.Id);
+                    userIds.Add(Guid.Parse(user.Id.ToString()));
                 }
             }
         }
@@ -168,7 +184,7 @@ public class AnnouncementService : IAnnouncementService
         return userIds.ToList();
     }
 
-    private static AnnouncementDto ToDto(Announcement announcement) => new()
+    private static AnnouncementDto ToDto(HappyCode.NetCoreBoilerplate.AnnouncementsModule.Models.Announcement announcement) => new()
     {
         Id = announcement.Id,
         Title = announcement.Title,

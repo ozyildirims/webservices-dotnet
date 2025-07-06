@@ -13,5 +13,7 @@ namespace HappyCode.NetCoreBoilerplate.Core.Dtos
         [Required]
         [RegularExpression("^[MF]$")]
         public string Gender { get; set; }
+        [Required]
+        public string DeptNo { get; set; }
     }
 }

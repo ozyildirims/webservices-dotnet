@@ -22,8 +22,8 @@ public class ExamDefinition : BaseEntity
     public Guid CreatedById { get; set; }
     public bool IsPublished { get; set; }
     
-    public required ICollection<ExamSection> Sections { get; set; } = new List<ExamSection>();
-    public required ICollection<ExamResult> Results { get; set; } = new List<ExamResult>();
+    public ICollection<ExamSection> Sections { get; set; } = new List<ExamSection>();
+    public ICollection<ExamResult> Results { get; set; } = new List<ExamResult>();
 }
 
 public enum ExamType

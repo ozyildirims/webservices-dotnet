@@ -14,8 +14,8 @@ public class ExamResult : BaseEntity
     public decimal Percentage { get; set; }
     public ExamStatus Status { get; set; }
     
-    public required ExamDefinition ExamDefinition { get; set; }
-    public required ICollection<SectionResult> SectionResults { get; set; } = new List<SectionResult>();
+    public ExamDefinition? ExamDefinition { get; set; }
+    public ICollection<SectionResult> SectionResults { get; set; } = new List<SectionResult>();
 }
 
 public class SectionResult : BaseEntity
@@ -26,8 +26,8 @@ public class SectionResult : BaseEntity
     public decimal Percentage { get; set; }
     public TimeSpan TimeTaken { get; set; }
     
-    public required ExamResult ExamResult { get; set; }
-    public required ExamSection ExamSection { get; set; }
+    public ExamResult? ExamResult { get; set; }
+    public ExamSection? ExamSection { get; set; }
 }
 
 public enum ExamStatus

@@ -45,6 +45,14 @@ namespace HappyCode.NetCoreBoilerplate.Api.Infrastructure.OpenApi
                     options.IncludeXmlComments(examsXmlPath);
                 }
 
+                // Include XML comments from AnnouncementsModule
+                var announcementsXmlFile = "HappyCode.NetCoreBoilerplate.AnnouncementsModule.xml";
+                var announcementsXmlPath = Path.Combine(AppContext.BaseDirectory, announcementsXmlFile);
+                if (File.Exists(announcementsXmlPath))
+                {
+                    options.IncludeXmlComments(announcementsXmlPath);
+                }
+
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -69,10 +77,11 @@ namespace HappyCode.NetCoreBoilerplate.Api.Infrastructure.OpenApi
                     }
                 });
 
-                options.OperationFilter<FeatureFlagOperationTransformer>();
-                options.OperationFilter<SecurityRequirementOperationTransformer>();
-                options.DocumentFilter<RemoveDeprecatedDocumentTransformer>();
-                options.DocumentFilter<SecurityDefinitionDocumentTransformer>();
+                // TODO: Fix transformer implementations
+                // options.OperationFilter<FeatureFlagOperationTransformer>();
+                // options.OperationFilter<SecurityRequirementOperationTransformer>();
+                // options.DocumentFilter<RemoveDeprecatedDocumentTransformer>();
+                // options.DocumentFilter<SecurityDefinitionDocumentTransformer>();
             });
         }
     }

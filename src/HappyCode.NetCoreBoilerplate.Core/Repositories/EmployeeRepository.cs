@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using HappyCode.NetCoreBoilerplate.Core.Models;
@@ -94,6 +95,13 @@ namespace HappyCode.NetCoreBoilerplate.Core.Repositories
                 LastName = employeePostDto.LastName,
                 BirthDate = employeePostDto.BirthDate.Value,
                 Gender = employeePostDto.Gender,
+                DeptNo = employeePostDto.DeptNo,
+                Department = new Department
+                {
+                    DeptNo = employeePostDto.DeptNo,
+                    DeptName = "Default Department",
+                    CreatedAt = DateTime.UtcNow
+                }
             };
 
             await DbContext.Employees.AddAsync(employee, cancellationToken);

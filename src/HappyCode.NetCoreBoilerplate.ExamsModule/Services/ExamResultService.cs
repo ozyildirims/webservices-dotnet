@@ -62,12 +62,14 @@ public class ExamResultService : IExamResultService
             ExamDefinitionId = dto.ExamDefinitionId,
             StartTime = dto.StartTime,
             Status = ExamStatus.InProgress,
+            ExamDefinition = exam,
             SectionResults = dto.SectionResults.Select(s => new SectionResult
             {
                 ExamSectionId = s.ExamSectionId,
                 Score = s.Score,
                 TimeTaken = s.TimeTaken,
-                Percentage = CalculatePercentage(s.Score, exam.Sections.First(es => es.Id == s.ExamSectionId).Points)
+                Percentage = CalculatePercentage(s.Score, exam.Sections.First(es => es.Id == s.ExamSectionId).Points),
+                ExamSection = exam.Sections.First(es => es.Id == s.ExamSectionId)
             }).ToList()
         };
 

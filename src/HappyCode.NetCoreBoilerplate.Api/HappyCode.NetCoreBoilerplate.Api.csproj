@@ -42,5 +42,6 @@
     <ProjectReference Include="..\HappyCode.NetCoreBoilerplate.BooksModule\HappyCode.NetCoreBoilerplate.BooksModule.csproj" />
     <ProjectReference Include="..\HappyCode.NetCoreBoilerplate.Core\HappyCode.NetCoreBoilerplate.Core.csproj" />
     <ProjectReference Include="..\HappyCode.NetCoreBoilerplate.ExamsModule\HappyCode.NetCoreBoilerplate.ExamsModule.csproj" />
+    <ProjectReference Include="../HappyCode.NetCoreBoilerplate.AnnouncementsModule/HappyCode.NetCoreBoilerplate.AnnouncementsModule.csproj" />
   </ItemGroup>
 </Project>
