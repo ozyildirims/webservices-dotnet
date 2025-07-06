@@ -6,6 +6,7 @@ using HappyCode.NetCoreBoilerplate.Api.Infrastructure.Filters;
 using HappyCode.NetCoreBoilerplate.Api.Infrastructure.Middlewares;
 using HappyCode.NetCoreBoilerplate.Api.Infrastructure.OpenApi;
 using HappyCode.NetCoreBoilerplate.BooksModule;
+using HappyCode.NetCoreBoilerplate.ExamsModule;
 using HappyCode.NetCoreBoilerplate.Core;
 using HappyCode.NetCoreBoilerplate.Core.Providers;
 using HappyCode.NetCoreBoilerplate.Core.Registrations;
@@ -25,6 +26,13 @@ using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Scalar.AspNetCore;
+using HappyCode.NetCoreBoilerplate.AnnouncementsModule;
+using HappyCode.NetCoreBoilerplate.AnnouncementsModule.Repositories;
+using HappyCode.NetCoreBoilerplate.AnnouncementsModule.Services;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.IO;
+using System.Collections.Generic;
 
 namespace HappyCode.NetCoreBoilerplate.Api
 {
@@ -46,13 +54,18 @@ namespace HappyCode.NetCoreBoilerplate.Api
                 .AddHttpContextAccessor()
                 .AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddMvcCore(options =>
+            services.AddControllers(options =>
                 {
                     options.Filters.Add<HttpGlobalExceptionFilter>();
                     options.Filters.Add<ApiKeyAuthorizationFilter>();
                 })
-                .AddApiExplorer()
-                .AddDataAnnotations();
+                .AddApplicationPart(Assembly.GetExecutingAssembly())
+                .AddApplicationPart(typeof(ExamsModuleConfiguration).Assembly)
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                    options.JsonSerializerOptions.WriteIndented = true;
+                });
 
             //there is a difference between AddDbContext() and AddDbContextPool(), more info https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-2.0#dbcontext-pooling and https://stackoverflow.com/questions/48443567/adddbcontext-or-adddbcontextpool
             services.AddDbContext<EmployeesContext>(options => options.UseSqlServer(_configuration.GetConnectionString("MsSqlDb")), contextLifetime: ServiceLifetime.Transient, optionsLifetime: ServiceLifetime.Singleton);
@@ -69,6 +82,46 @@ namespace HappyCode.NetCoreBoilerplate.Api
 
             services.AddCoreComponents();
             services.AddBooksModule(_configuration);
+            services.AddExamsModule(_configuration);
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "HappyCode.NetCoreBoilerplate API", Version = "v1" });
+                
+                // Include XML comments from API project
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
+
+                // Include XML comments from ExamsModule
+                var examsXmlFile = $"{typeof(ExamsModuleConfiguration).Assembly.GetName().Name}.xml";
+                var examsXmlPath = Path.Combine(AppContext.BaseDirectory, examsXmlFile);
+                options.IncludeXmlComments(examsXmlPath);
+
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtService, JwtService>();
@@ -99,6 +152,13 @@ namespace HappyCode.NetCoreBoilerplate.Api
                 healthChecksBuilder
                     .AddSqlServer(_configuration.GetConnectionString("MsSqlDb"), tags: ["ready"]);
             }
+
+            // Register Announcements module
+            services.AddDbContext<AnnouncementsContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+            services.AddScoped<IAnnouncementService, AnnouncementService>();
+            services.AddScoped<INotificationService, FirebaseNotificationService>();
         }
 
         public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -106,10 +166,17 @@ namespace HappyCode.NetCoreBoilerplate.Api
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseMiddlewareForFeature<ConnectionInfoMiddleware>(FeatureFlags.ConnectionInfo.ToString());
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "HappyCode.NetCoreBoilerplate API V1");
+                c.RoutePrefix = string.Empty;
+            });
+
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/healthz/live", new HealthCheckOptions
@@ -127,6 +194,7 @@ namespace HappyCode.NetCoreBoilerplate.Api
 
                 endpoints.MapControllers();
                 endpoints.MapBooksModule();
+                endpoints.MapExamsModule();
 
                 endpoints.MapOpenApi()
                     .CacheOutput();
@@ -135,6 +203,7 @@ namespace HappyCode.NetCoreBoilerplate.Api
             });
 
             app.InitBooksModule();
+            app.InitExamsModule();
         }
     }
 }

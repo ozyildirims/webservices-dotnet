@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,29 +11,31 @@ namespace HappyCode.NetCoreBoilerplate.Core.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(100)]
-        public string Username { get; set; }
-
-        [Required]
-        [StringLength(255)]
-        public string Email { get; set; }
-
-        [Required]
-        [StringLength(255)]
-        public string PasswordHash { get; set; }
-
-        [Required]
         [StringLength(50)]
-        public string Role { get; set; }
+        public required string Username { get; set; }
 
+        [Required]
+        [EmailAddress]
         [StringLength(100)]
-        public string FirstName { get; set; }
+        public required string Email { get; set; }
 
+        [Required]
         [StringLength(100)]
-        public string LastName { get; set; }
+        public required string PasswordHash { get; set; }
 
+        [Required]
         [StringLength(20)]
-        public string PhoneNumber { get; set; }
+        public required string Role { get; set; }
+
+        [StringLength(50)]
+        public required string FirstName { get; set; }
+
+        [StringLength(50)]
+        public required string LastName { get; set; }
+
+        [Phone]
+        [StringLength(20)]
+        public required string PhoneNumber { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -42,9 +45,9 @@ namespace HappyCode.NetCoreBoilerplate.Core.Models
 
         public DateTime? LastLoginAt { get; set; }
 
-        public virtual Student Student { get; set; }
-        public virtual Teacher Teacher { get; set; }
-        public virtual Parent Parent { get; set; }
-        public virtual Admin Admin { get; set; }
+        public virtual Student? Student { get; set; }
+        public virtual Teacher? Teacher { get; set; }
+        public virtual Parent? Parent { get; set; }
+        public virtual Admin? Admin { get; set; }
     }
 } 

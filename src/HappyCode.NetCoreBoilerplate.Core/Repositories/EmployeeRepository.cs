@@ -39,7 +39,7 @@ namespace HappyCode.NetCoreBoilerplate.Core.Repositories
         {
             var emp = await DbContext.Employees
                 .AsNoTracking()
-                .SingleOrDefaultAsync(x => x.EmpNo == id, cancellationToken);
+                .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
             if (emp == null)
             {
                 return null;
@@ -52,7 +52,7 @@ namespace HappyCode.NetCoreBoilerplate.Core.Repositories
         {
             var emp = await DbContext.Employees
                 .Include(x => x.Department)
-                .SingleOrDefaultAsync(x => x.EmpNo == (int)id, cancellationToken);
+                .SingleOrDefaultAsync(x => x.Id == (int)id, cancellationToken);
             if (emp == null)
             {
                 return null;
@@ -60,7 +60,7 @@ namespace HappyCode.NetCoreBoilerplate.Core.Repositories
 
             return new EmployeeDetailsDto
             {
-                Id = emp.EmpNo,
+                Id = emp.Id,
                 FirstName = emp.FirstName,
                 LastName = emp.LastName,
                 BirthDate = emp.BirthDate,
@@ -105,7 +105,7 @@ namespace HappyCode.NetCoreBoilerplate.Core.Repositories
         public async Task<EmployeeDto> UpdateAsync(int id, EmployeePutDto employeePutDto, CancellationToken cancellationToken)
         {
             var emp = await DbContext.Employees
-                .SingleOrDefaultAsync(x => x.EmpNo == id, cancellationToken);
+                .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
             if (emp is null)
             {
                 return null;
@@ -121,7 +121,7 @@ namespace HappyCode.NetCoreBoilerplate.Core.Repositories
         public async Task<bool> DeleteByIdAsync(int id, CancellationToken cancellationToken)
         {
             var emp = await DbContext.Employees
-                .SingleOrDefaultAsync(x => x.EmpNo == id, cancellationToken);
+                .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
             if (emp == null)
             {
                 return false;

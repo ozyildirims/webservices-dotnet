@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,12 +13,15 @@ namespace HappyCode.NetCoreBoilerplate.Core.Models
         [Required]
         public int UserId { get; set; }
 
+        [Required]
+        [StringLength(20)]
+        public required string AdminNumber { get; set; }
+
+        [Required]
         [StringLength(50)]
-        public string AdminNumber { get; set; }
+        public required string Department { get; set; }
 
-        [StringLength(100)]
-        public string Department { get; set; }
-
+        public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? UpdatedAt { get; set; }

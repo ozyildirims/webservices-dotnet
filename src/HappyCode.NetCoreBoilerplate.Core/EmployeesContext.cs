@@ -33,7 +33,7 @@ namespace HappyCode.NetCoreBoilerplate.Core
                 entity.Property(e => e.DeptName).IsUnicode(false);
 
                 entity.HasOne(d => d.Manger)
-                    .WithMany(p => p.LeadingDepartments)
+                    .WithMany(p => p.ManagedDepartments)
                     .HasForeignKey(d => d.MangerNo)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("departments_ibfk_1");
@@ -44,7 +44,7 @@ namespace HappyCode.NetCoreBoilerplate.Core
                 entity.HasIndex(e => e.DeptNo)
                     .HasDatabaseName("dept_no");
 
-                entity.Property(e => e.EmpNo).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.FirstName).IsUnicode(false);
 

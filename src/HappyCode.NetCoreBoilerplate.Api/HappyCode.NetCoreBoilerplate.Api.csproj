@@ -24,6 +24,7 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
     <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" />
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Serilog.Enrichers.Environment" />
@@ -40,5 +41,6 @@
   <ItemGroup>
     <ProjectReference Include="..\HappyCode.NetCoreBoilerplate.BooksModule\HappyCode.NetCoreBoilerplate.BooksModule.csproj" />
     <ProjectReference Include="..\HappyCode.NetCoreBoilerplate.Core\HappyCode.NetCoreBoilerplate.Core.csproj" />
+    <ProjectReference Include="..\HappyCode.NetCoreBoilerplate.ExamsModule\HappyCode.NetCoreBoilerplate.ExamsModule.csproj" />
   </ItemGroup>
 </Project>

@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,19 +13,25 @@ namespace HappyCode.NetCoreBoilerplate.Core.Models
         [Required]
         public int UserId { get; set; }
 
-        [StringLength(50)]
-        public string StudentNumber { get; set; }
+        [Required]
+        [StringLength(20)]
+        public required string StudentNumber { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
+        public int Grade { get; set; }
+
+        [Required]
         [StringLength(200)]
-        public string Address { get; set; }
+        public required string Address { get; set; }
 
-        public int? ParentId { get; set; }
+        public bool IsActive { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? UpdatedAt { get; set; }
+
+        public int? ParentId { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }

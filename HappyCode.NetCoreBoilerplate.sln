@@ -43,6 +43,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HappyCode.NetCoreBoilerplat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HappyCode.NetCoreBoilerplate.BooksModule.IntegrationTests", "test\HappyCode.NetCoreBoilerplate.BooksModule.IntegrationTests\HappyCode.NetCoreBoilerplate.BooksModule.IntegrationTests.csproj", "{B3E52219-7B85-42B3-B607-F323401AC878}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HappyCode.NetCoreBoilerplate.ExamsModule", "src\HappyCode.NetCoreBoilerplate.ExamsModule\HappyCode.NetCoreBoilerplate.ExamsModule.csproj", "{92D89811-0569-4425-AE42-50F62A78D3D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D6DD4F8F-0D0C-46EA-B5DB-496DF17112C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HappyCode.NetCoreBoilerplate.ExamsModule.Tests", "test\HappyCode.NetCoreBoilerplate.ExamsModule.Tests\HappyCode.NetCoreBoilerplate.ExamsModule.Tests.csproj", "{50A84782-34B9-40B8-9935-D191F0697367}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +91,14 @@ Global
 		{B3E52219-7B85-42B3-B607-F323401AC878}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3E52219-7B85-42B3-B607-F323401AC878}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3E52219-7B85-42B3-B607-F323401AC878}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92D89811-0569-4425-AE42-50F62A78D3D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92D89811-0569-4425-AE42-50F62A78D3D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92D89811-0569-4425-AE42-50F62A78D3D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92D89811-0569-4425-AE42-50F62A78D3D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50A84782-34B9-40B8-9935-D191F0697367}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50A84782-34B9-40B8-9935-D191F0697367}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50A84782-34B9-40B8-9935-D191F0697367}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50A84782-34B9-40B8-9935-D191F0697367}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +113,8 @@ Global
 		{C8166147-F446-4774-AFEC-9C1795B822B8} = {8AC3899F-4C0B-4EF6-AD2B-97D91FE107F5}
 		{75AF49EF-1411-408A-B9E7-CE8CADAB7FC8} = {6D3497A0-339F-4545-86B8-7E015B468025}
 		{B3E52219-7B85-42B3-B607-F323401AC878} = {8AC3899F-4C0B-4EF6-AD2B-97D91FE107F5}
+		{92D89811-0569-4425-AE42-50F62A78D3D5} = {6D3497A0-339F-4545-86B8-7E015B468025}
+		{50A84782-34B9-40B8-9935-D191F0697367} = {D6DD4F8F-0D0C-46EA-B5DB-496DF17112C7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FE6D8568-233C-4A49-84FF-2FE6C0DE238C}

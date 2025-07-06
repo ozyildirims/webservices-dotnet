@@ -1,20 +1,21 @@
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace HappyCode.NetCoreBoilerplate.Core.Dtos
 {
     public class ExamDto
     {
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public required string Title { get; set; }
+        public required string Description { get; set; }
         public int TeacherId { get; set; }
-        public string TeacherName { get; set; }
+        public required string TeacherName { get; set; }
         public DateTime ExamDate { get; set; }
-        public int DurationMinutes { get; set; }
+        public TimeSpan Duration { get; set; }
         public int TotalPoints { get; set; }
-        public string Subject { get; set; }
-        public string ExamType { get; set; }
-        public string Status { get; set; }
+        public required string Subject { get; set; }
+        public required string ExamType { get; set; }
+        public required string Status { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 
@@ -22,10 +23,10 @@ namespace HappyCode.NetCoreBoilerplate.Core.Dtos
     {
         [Required]
         [StringLength(200)]
-        public string Title { get; set; }
+        public required string Title { get; set; }
 
         [StringLength(500)]
-        public string Description { get; set; }
+        public required string Description { get; set; }
 
         [Required]
         public int TeacherId { get; set; }
@@ -42,19 +43,19 @@ namespace HappyCode.NetCoreBoilerplate.Core.Dtos
         public int TotalPoints { get; set; }
 
         [StringLength(100)]
-        public string Subject { get; set; }
+        public required string Subject { get; set; }
 
         [StringLength(50)]
-        public string ExamType { get; set; }
+        public required string ExamType { get; set; }
     }
 
     public class ExamUpdateDto
     {
         [StringLength(200)]
-        public string Title { get; set; }
+        public required string Title { get; set; }
 
         [StringLength(500)]
-        public string Description { get; set; }
+        public required string Description { get; set; }
 
         public DateTime? ExamDate { get; set; }
 
@@ -65,27 +66,27 @@ namespace HappyCode.NetCoreBoilerplate.Core.Dtos
         public int? TotalPoints { get; set; }
 
         [StringLength(100)]
-        public string Subject { get; set; }
+        public required string Subject { get; set; }
 
         [StringLength(50)]
-        public string ExamType { get; set; }
+        public required string ExamType { get; set; }
 
         [StringLength(50)]
-        public string Status { get; set; }
+        public required string Status { get; set; }
     }
 
     public class ExamResultDto
     {
         public int Id { get; set; }
         public int ExamId { get; set; }
-        public string ExamTitle { get; set; }
+        public required string ExamTitle { get; set; }
         public int StudentId { get; set; }
-        public string StudentName { get; set; }
+        public required string StudentName { get; set; }
         public decimal Score { get; set; }
         public int TotalPoints { get; set; }
         public decimal? Percentage { get; set; }
-        public string Grade { get; set; }
-        public string Comments { get; set; }
+        public required string Grade { get; set; }
+        public required string Comments { get; set; }
         public DateTime? CompletedAt { get; set; }
         public DateTime CreatedAt { get; set; }
     }
@@ -107,10 +108,10 @@ namespace HappyCode.NetCoreBoilerplate.Core.Dtos
         public int TotalPoints { get; set; }
 
         [StringLength(10)]
-        public string Grade { get; set; }
+        public required string Grade { get; set; }
 
         [StringLength(500)]
-        public string Comments { get; set; }
+        public required string Comments { get; set; }
 
         public DateTime? CompletedAt { get; set; }
     }
@@ -124,10 +125,10 @@ namespace HappyCode.NetCoreBoilerplate.Core.Dtos
         public int? TotalPoints { get; set; }
 
         [StringLength(10)]
-        public string Grade { get; set; }
+        public required string Grade { get; set; }
 
         [StringLength(500)]
-        public string Comments { get; set; }
+        public required string Comments { get; set; }
 
         public DateTime? CompletedAt { get; set; }
     }

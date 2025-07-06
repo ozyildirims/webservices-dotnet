@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,21 +13,25 @@ namespace HappyCode.NetCoreBoilerplate.Core.Models
         [Required]
         public int UserId { get; set; }
 
-        [StringLength(50)]
-        public string TeacherNumber { get; set; }
+        [Required]
+        [StringLength(20)]
+        public required string TeacherNumber { get; set; }
 
+        [Required]
         [StringLength(100)]
-        public string Subject { get; set; }
+        public required string Subject { get; set; }
 
-        [StringLength(200)]
-        public string Bio { get; set; }
+        [StringLength(500)]
+        public required string Bio { get; set; }
 
+        public DateTime HireDate { get; set; }
+        public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? UpdatedAt { get; set; }
 
         [ForeignKey("UserId")]
-        public virtual User User { get; set; }
+        public required User User { get; set; }
 
         public virtual ICollection<StudySession> StudySessions { get; set; } = new HashSet<StudySession>();
         public virtual ICollection<Exam> Exams { get; set; } = new HashSet<Exam>();
