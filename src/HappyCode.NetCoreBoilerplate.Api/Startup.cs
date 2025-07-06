@@ -128,11 +128,7 @@ namespace HappyCode.NetCoreBoilerplate.Api
             // app.UseMiddlewareForFeature<ConnectionInfoMiddleware>(FeatureFlags.ConnectionInfo.ToString());
 
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "HappyCode.NetCoreBoilerplate API V1");
-                c.RoutePrefix = string.Empty;
-            });
+            // app.UseSwaggerUI(...); // kaldırıldı
 
             app.UseRouting();
             app.UseAuthentication();
@@ -157,10 +153,13 @@ namespace HappyCode.NetCoreBoilerplate.Api
                 endpoints.MapBooksModule();
                 endpoints.MapExamsModule();
 
-                endpoints.MapOpenApi()
-                    .CacheOutput();
-
-                // Scalar dokümantasyonu için özel bir endpoint yok, OpenAPI endpointi yeterli.
+                endpoints.MapOpenApi().CacheOutput();
+                endpoints.MapScalarApiReference("/api-doc", options =>
+                {
+                    options.WithTitle("HappyCode.NetCoreBoilerplate API");
+                    options.WithTheme(ScalarTheme.Solarized);
+                    options.WithOpenApiRoutePattern("/swagger/v1/swagger.json");
+                });
             });
 
             app.InitBooksModule();
