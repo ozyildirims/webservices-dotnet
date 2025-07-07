@@ -16,4 +16,4 @@ FROM node:20-alpine AS prod
 WORKDIR /app
 COPY --from=base /app .
 EXPOSE 3000
-CMD ["npm", "start"] 
+CMD ["node", ".next/standalone/server.js"] 

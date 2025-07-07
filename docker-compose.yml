@@ -74,7 +74,7 @@ services:
   nextjs-admin:
     container_name: nextjs-admin
     build:
-      context: ./src/HappyCode.NetCoreBoilerplate.Admin
+      context: ./admin-panel
       dockerfile: Dockerfile
     ports:
       - 3000:3000
